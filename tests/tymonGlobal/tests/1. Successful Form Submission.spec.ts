@@ -12,10 +12,8 @@ test('1. Successful Form Submission @regression @smoke', async ({ page, isMobile
     const contactUsPage = new ContactUsPage(page);
 
     // Launch the application URL
-    await contactUsPage.launchURL();
+    await contactUsPage.launchURL(isMobile);
     await contactUsPage.enterDetails(Form);
     await contactUsPage.clickSendMessageButton();
     await contactUsPage.verfiySuccessMessage();
-
-
 });

@@ -7,11 +7,25 @@ export class ContactUsPage {
         this.page = page
     }
 
-    async launchURL() {
+    async launchURL(isMobile: boolean) {
+        // Navigate to the specified URL
         await this.navigateToURL(testConfig.url);
+
+        // Wait for the page to load with the expected title
         await this.waitForPageTitle(testConfig.pageTitle, { timeout: 100000 });
-        await this.checkLoadingStatus();
+
+        // Check loading status based on the device type (mobile or desktop)
+        if (isMobile) {
+            await this.checkLoadingStatusMobile();
+        }
+        else {
+            await this.checkLoadingStatus();
+        }
         this.logSuccessfulLaunch();
+    }
+    async checkLoadingStatusMobile() {
+        await expect(this.page.locator('h2').filter({ hasText: 'Let\'s Talk' })).toBeVisible();
+        console.log('Page loaded successfully in mobile view');
     }
     async checkLoadingStatus() {
         await expect(this.page.getByRole('link', { name: 'Let\'s Connect' })).toBeVisible();
