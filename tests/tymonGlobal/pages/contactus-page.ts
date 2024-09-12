@@ -1,7 +1,7 @@
 import { expect, Locator, type Page } from "@playwright/test";
 import { testConfig } from '../tests/testdata';
 export class ContactUsPage {
-
+    
     readonly page: Page
     constructor(page: Page) {
         this.page = page
@@ -67,6 +67,24 @@ export class ContactUsPage {
         await locator.fill(text); // Fills the text in the provided locator
         console.log('Text value entered : ', text);
     }
+
+    async verifyNameFieldValidation(fullName: string) {
+        // getByText('This field is required.')
+        const firstName = this.page.getByPlaceholder('Full Name ');
+        await this.fillTextField(firstName, fullName);
+        await this.clearTextField();
+        await this.verifyErrorMessage();
+    }
+    async verifyErrorMessage() {
+        await expect (this.page.getByText('This field is required.')).toBeVisible();
+        console.log('Error MEssage verified');
+    }
+    async clearTextField() {
+        const firstName = this.page.getByPlaceholder('Full Name ');
+        await firstName.clear();
+        console.log('Text field cleared ');
+    }
+
 
 }
 
