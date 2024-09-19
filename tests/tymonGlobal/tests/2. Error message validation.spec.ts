@@ -14,7 +14,10 @@ test('2. Error message validation @regression @smoke', async ({ page, isMobile, 
     // Launch the application URL
     await contactUsPage.launchURL(isMobile);
     await contactUsPage.verifyNameFieldValidation(Form.fullName);
-    //await contactUsPage.enterDetails(Form);
+    await contactUsPage.verifyPhoneNumberFieldValidation(Form.phone);
+    await contactUsPage.verifyEmailFieldValidation(Form.email);
+    await contactUsPage.chooseDropdown(Form.areaDropdown);
+    await contactUsPage.typeTextBox(Form.message);
     await contactUsPage.clickSendMessageButton();
     await contactUsPage.verfiySuccessMessage();
 });

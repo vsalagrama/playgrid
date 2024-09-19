@@ -1,10 +1,19 @@
 import { expect, Locator, type Page } from "@playwright/test";
 import { testConfig } from '../tests/testdata';
 export class ContactUsPage {
-    
+
+    private firstName: Locator;
+    private phoneNumber: Locator;
+    private email: Locator;
+    private message: Locator;
+   
     readonly page: Page
     constructor(page: Page) {
-        this.page = page
+        this.page = page;
+        this.firstName = this.page.getByPlaceholder('Full Name ');
+        this.phoneNumber = this.page.getByPlaceholder('Phone Number ');
+        this.email = this.page.getByPlaceholder('E-mail Address ');
+        this.message = this.page.getByPlaceholder('Your Message ');
     }
 
     async launchURL(isMobile: boolean) {
@@ -42,15 +51,12 @@ export class ContactUsPage {
     }
 
     async enterDetails(formObj: { fullName: string; email: string; message: string; phone: string; areaDropdown: "Customer Support" | "Product" | "Service"; }) {
-        const firstName = this.page.getByPlaceholder('Full Name ');
-        const phoneNumber = this.page.getByPlaceholder('Phone Number ');
-        const email = this.page.getByPlaceholder('E-mail Address ');
-        const message = this.page.getByPlaceholder('Your Message ');
-        await this.fillTextField(firstName, formObj.fullName);
-        await this.fillTextField(phoneNumber, formObj.phone);
-        await this.fillTextField(email, formObj.email);
+        
+        await this.fillTextField(this.firstName, formObj.fullName);
+        await this.fillTextField(this.phoneNumber, formObj.phone);
+        await this.fillTextField(this.email, formObj.email);
         await this.chooseDropdown(formObj.areaDropdown);
-        await this.fillTextField(message, formObj.message);
+        await this.fillTextField(this.message, formObj.message);
     }
     async verfiySuccessMessage() {
         await expect(this.page.getByText('Thank you! Form submitted')).toBeVisible();
@@ -69,21 +75,39 @@ export class ContactUsPage {
     }
 
     async verifyNameFieldValidation(fullName: string) {
-        // getByText('This field is required.')
-        const firstName = this.page.getByPlaceholder('Full Name ');
-        await this.fillTextField(firstName, fullName);
-        await this.clearTextField();
+        await this.fillTextField(this.firstName, fullName);
+        await this.clearTextField(this.firstName);
         await this.verifyErrorMessage();
+        await this.fillTextField(this.firstName, fullName);
     }
     async verifyErrorMessage() {
-        await expect (this.page.getByText('This field is required.')).toBeVisible();
-        console.log('Error MEssage verified');
+        await expect(this.page.getByText('This field is required.')).toBeVisible();
+        console.log('Error Message verified');
     }
-    async clearTextField() {
-        const firstName = this.page.getByPlaceholder('Full Name ');
-        await firstName.clear();
-        console.log('Text field cleared ');
+    async clearTextField(locator: Locator) {
+        await locator.clear();
+        console.log('Text field cleared ', locator);
     }
+
+    async verifyPhoneNumberFieldValidation(phone: string) {
+        await this.fillTextField(this.phoneNumber, phone);
+        await this.clearTextField(this.phoneNumber);
+        await this.verifyErrorMessage();
+        await this.fillTextField(this.phoneNumber, phone);
+    }
+    async verifyEmailFieldValidation(emailaddress: string) {
+        await this.fillTextField(this.email, emailaddress);
+        await this.clearTextField(this.email);
+        await this.verifyErrorMessage();
+        await this.fillTextField(this.email, emailaddress);
+    }
+    async typeTextBox(text:string){
+        await this.fillTextField(this.message, text);
+        await this.clearTextField(this.message);
+        await this.verifyErrorMessage();
+        await this.fillTextField(this.message, text);
+    }
+
 
 
 }
