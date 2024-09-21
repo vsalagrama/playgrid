@@ -6,7 +6,7 @@ let validStatuses: string[] = ['available', 'pending', 'sold'];
 // Parameterized test case for each valid status
 //for (let status of validStatuses) {
 validStatuses.forEach((status) => {
-    test(`GET request to find pets by status - ${status}`, async ({ request }) => {
+    test(`GET request to find pets by status @api - ${status}`, async ({ request }) => {
         console.log(`the value of status is ${status}`);
         // Sending the GET request
         const response = await request.get('https://petstore.swagger.io/v2/pet/findByStatus', {

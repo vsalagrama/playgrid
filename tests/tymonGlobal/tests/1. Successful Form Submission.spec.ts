@@ -17,3 +17,12 @@ test('1. Successful Form Submission @regression @smoke', async ({ page, isMobile
     await contactUsPage.clickSendMessageButton();
     await contactUsPage.verfiySuccessMessage();
 });
+
+test.afterEach(async ({ page }, testInfo) => {
+    await page.close();
+    console.log(`Finished ${testInfo.title} with status : ${testInfo.status}`);
+
+    if (testInfo.status !== testInfo.expectedStatus) {
+        console.log(`Did not run as expected, ended up at ${page.url()}`);
+    }
+});

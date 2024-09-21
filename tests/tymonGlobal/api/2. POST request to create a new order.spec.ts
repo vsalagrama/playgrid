@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('POST request to create a new order in the pet store @regression', async ({ request }) => {
+test('POST request to create a new order in the pet store @regression @api', async ({ request }) => {
   // Define the payload (data) to be sent in the POST request
   const orderPayload = {
     id: 100,
